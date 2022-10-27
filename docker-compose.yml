@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  logs-back-end-container:
+    image: logs-back-end-container
+    container_name: logs-back-end-container
+    ports:
+      - 8080:8080
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    

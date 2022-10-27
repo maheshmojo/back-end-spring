@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    stages {
+        stage('Gradle Build') {
+            steps {
+                sh 'chmod +x gradlew'
+                sh './gradlew clean build' 
+            }
+        }
+        stage('deploy using jar'){
+             steps{
+                sh 'cd build/libs/'
+                sh 'sudo nohup java -jar logs-0.0.1-SNAPSHOT.jar & hello_123'
+             }
+        }
+    }
+    post{
+        always{
+            deleteDir()
+        }
+        failure{
+            emailext body: 'A Failure ', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: "Failue on build no:'(${env.BUILD_ID})'"
+        }
+    }
+}
